@@ -1,0 +1,26 @@
+function doPost(e) {
+  var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+  
+  // Parse the incoming JSON
+  var data = JSON.parse(e.postData.contents);
+
+  // Append to the sheet
+  sheet.appendRow([
+    data.fullName,
+    data.rollNo,
+    data.branch,
+    data.email,
+    data.phone,
+    data.year,
+    data.division,
+    data.cgpa,
+    data.skills,
+    data.why_attend,   // ✅ NEW
+    data.questions,    // ✅ NEW
+    new Date()         // ✅ Timestamp at the end
+  ]);
+
+  return ContentService
+    .createTextOutput("Success")
+    .setMimeType(ContentService.MimeType.TEXT);
+}
