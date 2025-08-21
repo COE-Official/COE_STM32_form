@@ -19,28 +19,32 @@ document.getElementById("enquiryForm").addEventListener("submit", function(e) {
     questions: document.getElementById("questions").value
   };
 
-  // ✅ Phone Validation
+  // Phone validation
   if (data.phone.length !== 10) {
     alert("Phone number must be exactly 10 digits.");
     resetButton(submitBtn);
     return;
   }
 
-  // ✅ CGPA Validation
   if (data.cgpa < 0 || data.cgpa > 10) {
     alert("CGPA must be between 0 and 10.");
     resetButton(submitBtn);
     return;
   }
 
-  // ✅ Email Validation (must contain @gmail.com or @tcetmumbai.in)
   if (!(data.email.endsWith("@gmail.com") || data.email.endsWith("@tcetmumbai.in"))) {
     alert("Email must be a @gmail.com or @tcetmumbai.in address.");
     resetButton(submitBtn);
     return;
   }
 
-  // ✅ Submit to Google Apps Script
+  // Consent checkbox
+  if (!document.getElementById("consent").checked) {
+    alert("Please check the confirmation box to proceed.");
+    resetButton(submitBtn);
+    return;
+  }
+
   fetch("https://script.google.com/macros/s/AKfycbzQ89LG3EWspG6Bkh1eu8E13P44BfGdWch_Rqrhbpak94U_IfXmfQG2ETCLiI5x4GiG/exec/exec", {
     method: "POST",
     mode: "no-cors",
@@ -50,8 +54,8 @@ document.getElementById("enquiryForm").addEventListener("submit", function(e) {
     body: JSON.stringify(data)
   })
   .then(() => {
-    document.getElementById("enquiryForm").style.display = "none";   // ✅ Hide form
-    document.getElementById("successMessage").style.display = "block"; // ✅ Show success
+    document.getElementById("enquiryForm").style.display = "none";
+    document.getElementById("successMessage").style.display = "block";
     resetButton(submitBtn);
     document.getElementById("enquiryForm").reset();
   })
@@ -61,14 +65,12 @@ document.getElementById("enquiryForm").addEventListener("submit", function(e) {
   });
 });
 
-// ✅ Reset button helper
 function resetButton(btn) {
   btn.disabled = false;
   btn.textContent = "Submit";
 }
 
-// ✅ New response button (reloads the form)
-document.getElementById("newResponseBtn").addEventListener("click", function() {
+document.getElementById("newResponseBtn").addEventListener("click", function () {
   document.getElementById("enquiryForm").style.display = "block";
   document.getElementById("successMessage").style.display = "none";
 });
